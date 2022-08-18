@@ -42,7 +42,7 @@ param_lookup <- tibble::tribble(
   "BILI", "BILI", "Bilirubin (umol/L)", 7,
   "BUN", "BUN", "Blood Urea Nitrogen (mmol/L)", 8,
   "CA", "CA", "Calcium (mmol/L)", 9,
-  "CHOLES", "CHOLES", "Cholesterol (mmol/L)", 10,
+  "CHOL", "CHOLES", "Cholesterol (mmol/L)", 10,
   "CK", "CK", "Creatinine Kinase (U/L)", 11,
   "CL", "CL", "Chloride (mmol/L)", 12,
   "COLOR", "COLOR", "Color", 13,
@@ -78,6 +78,29 @@ param_lookup <- tibble::tribble(
   "WBC", "WBC", "Leukocytes (GI/L)", 43
 )
 
+# Assign ATOXDSCL and ATOXDSCH to hold lab grading terms (required for lab grading)
+# ATOXDSCL and ATOXDSCH hold terms defined by NCI-CTCAEv4.
+grade_lookup <- tibble::tribble(
+  ~PARAMCD, ~ATOXDSCL,                      ~ATOXDSCH,
+  "ALB",     "Hypoalbuminemia",             NA_character_,
+  "ALKPH",   NA_character_,                 "Alkaline phosphatase increased",
+  "ALT",     NA_character_,                 "Alanine aminotransferase increased",
+  "AST",     NA_character_,                 "Aspartate aminotransferase increased",
+  "BILI",    NA_character_,                 "Blood bilirubin increased",
+  "CA",      "Hypocalcemia",                "Hypercalcemia",
+  "CHOLES",  NA_character_,                 "Cholesterol high",
+  "CK",      NA_character_,                 "CPK increased",
+  "CREAT",   NA_character_,                 "Creatinine increased",
+  "GGT",     NA_character_,                 "GGT increased",
+  "GLUC",    "Hypoglycemia",                "Hyperglycemia",
+  "HGB",     "Anemia",                      "Hemoglobin increased",
+  "POTAS",   "Hypokalemia",                 "Hyperkalemia",
+  "LYMPH",   "CD4 lymphocytes decreased",   NA_character_,
+  "PHOS",    "Hypophosphatemia",            NA_character_,
+  "PLAT",    "Platelet count decreased",    NA_character_,
+  "SODIUM",  "Hyponatremia",                "Hypernatremia",
+  "WBC",     "White blood cell decreased",  "Leukocytosis",
+)
 
 # Derivations ----
 
@@ -100,8 +123,7 @@ adlb <- lb %>%
 
 adlb <- adlb %>%
   ## Add PARAMCD PARAM and PARAMN - from LOOK-UP table ----
-  # Replace with PARAMCD lookup function
-  derive_vars_merged(
+  derive_vars_merged_lookup(
     dataset_add = param_lookup,
     new_vars = vars(PARAMCD, PARAM, PARAMN),
     by_vars = vars(LBTESTCD)
@@ -186,6 +208,48 @@ adlb <- adlb %>%
   # Calculate PCHG
   derive_var_pchg()
 
+## Derive Toxicity Grade variable using NCI-CTCAEv4 criteria
+
+adlb <- adlb %>%
+  # Add ATOXDSCL and ATOXDSCL from look-up table
+  derive_vars_merged(
+    dataset_add = grade_lookup,
+    new_vars = vars(ATOXDSCL, ATOXDSCH),
+    by_vars = vars(PARAMCD)
+  )
+  # derive grades relating to low values
+  derive_var_atoxgr_dir(
+    new_var = ATOXGRL,
+    tox_description_var = ATOXDSCL,
+    meta_criteria = atoxgr_criteria_ctcv4,
+    criteria_direction = "L",
+    get_unit_expr = extract_unit(PARAM)
+    ) %>%
+  # derive grades relating to low values
+  derive_var_atoxgr_dir(
+    new_var = ATOXGRH,
+    tox_description_var = ATOXDSCH,
+    meta_criteria = atoxgr_criteria_ctcv4,
+    criteria_direction = "H",
+    get_unit_expr = extract_unit(PARAM)
+  ) %>%
+  # Calculate baseline low toxicity grade BTOXGRH
+  derive_var_base(
+    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    source_var = ATOXGRL,
+    new_var = BTOXGRL
+  ) %>%
+  # Calculate baseline high toxicity grade BTOXGRH
+  derive_var_base(
+    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    source_var = ATOXGRH,
+    new_var = BTOXGRH
+  ) %>%
+  # (Optional) combine ATOXGRL and ATOXGRH into ATOXGR variable
+  derive_var_atoxgr(
+    lotox_description_var = ATOXDSCL,
+    hitox_description_var = ATOXDSCH
+  )
 
 ## Calculate R2BASE, R2ANRLO and R2ANRHI ----
 adlb <- adlb %>%
