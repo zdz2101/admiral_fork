@@ -38,7 +38,7 @@ param_lookup <- tibble::tribble(
   "ALT", "ALT", "Alanine Aminotransferase (U/L)", 3,
   "ANISO", "ANISO", "Anisocytes", 4,
   "AST", "AST", "Aspartate Aminotransferase (U/L)", 5,
-  "BASO", "BASO", "Basophils (GI/L)", 6,
+  "BASO", "BASO", "Basophils (10^9/L)", 6,
   "BILI", "BILI", "Bilirubin (umol/L)", 7,
   "BUN", "BUN", "Blood Urea Nitrogen (mmol/L)", 8,
   "CA", "CA", "Calcium (mmol/L)", 9,
@@ -47,7 +47,7 @@ param_lookup <- tibble::tribble(
   "CL", "CL", "Chloride (mmol/L)", 12,
   "COLOR", "COLOR", "Color", 13,
   "CREAT", "CREAT", "Creatinine (umol/L)", 14,
-  "EOS", "EOS", "Eosinophils (GI/L)", 15,
+  "EOS", "EOS", "Eosinophils (10^9/L)", 15,
   "GGT", "GGT", "Gamma Glutamyl Transferase (U/L)", 16,
   "GLUC", "GLUC", "Glucose (mmol/L)", 17,
   "HBA1C", "HBA1C", "Hemoglobin A1C (1)", 18,
@@ -55,16 +55,16 @@ param_lookup <- tibble::tribble(
   "HGB", "HGB", "Hemoglobin (mmol/L)", 20,
   "K", "POTAS", "Potassium (mmol/L)", 21,
   "KETONES", "KETON", "Ketones", 22,
-  "LYM", "LYMPH", "Lymphocytes (GI/L)", 23,
+  "LYM", "LYMPH", "Lymphocytes (10^9/L)", 23,
   "MACROCY", "MACROC", "Macrocytes", 24,
   "MCH", "MCH", "Ery. Mean Corpuscular Hemoglobin (fmol(Fe))", 25,
   "MCHC", "MCHC", "Ery. Mean Corpuscular HGB Concentration (mmol/L)", 26,
   "MCV", "MCV", "Ery. Mean Corpuscular Volume (f/L)", 27,
   "MICROCY", "MICROC", "Microcytes", 28,
-  "MONO", "MONO", "Monocytes (GI/L)", 29,
+  "MONO", "MONO", "Monocytes (10^9/L)", 29,
   "PH", "PH", "pH", 30,
   "PHOS", "PHOS", "Phosphate (mmol/L)", 31,
-  "PLAT", "PLAT", "Platelet (GI/L)", 32,
+  "PLAT", "PLAT", "Platelet (10^9/L)", 32,
   "POIKILO", "POIKIL", "Poikilocytes", 33,
   "POLYCHR", "POLYCH", "Polychromasia", 34,
   "PROT", "PROT", "Protein (g/L)", 35,
@@ -75,7 +75,7 @@ param_lookup <- tibble::tribble(
   "URATE", "URATE", "Urate (umol/L)", 40,
   "UROBIL", "UROBIL", "Urobilinogen", 41,
   "VITB12", "VITB12", "Vitamin B12 (pmol/L)", 42,
-  "WBC", "WBC", "Leukocytes (GI/L)", 43
+  "WBC", "WBC", "Leukocytes (10^9/L)", 43
 )
 
 # Assign ATOXDSCL and ATOXDSCH to hold lab grading terms (required for lab grading)
@@ -216,8 +216,8 @@ adlb <- adlb %>%
     dataset_add = grade_lookup,
     new_vars = vars(ATOXDSCL, ATOXDSCH),
     by_vars = vars(PARAMCD)
-  )
-  # derive grades relating to low values
+  ) %>%
+  # derive grade ATOXGRL relating to low values
   derive_var_atoxgr_dir(
     new_var = ATOXGRL,
     tox_description_var = ATOXDSCL,
@@ -225,7 +225,7 @@ adlb <- adlb %>%
     criteria_direction = "L",
     get_unit_expr = extract_unit(PARAM)
     ) %>%
-  # derive grades relating to low values
+  # derive grade ATOXGRH relating to low values
   derive_var_atoxgr_dir(
     new_var = ATOXGRH,
     tox_description_var = ATOXDSCH,
@@ -233,7 +233,7 @@ adlb <- adlb %>%
     criteria_direction = "H",
     get_unit_expr = extract_unit(PARAM)
   ) %>%
-  # Calculate baseline low toxicity grade BTOXGRH
+  # Calculate baseline low toxicity grade BTOXGRL
   derive_var_base(
     by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
     source_var = ATOXGRL,
@@ -249,6 +249,12 @@ adlb <- adlb %>%
   derive_var_atoxgr(
     lotox_description_var = ATOXDSCL,
     hitox_description_var = ATOXDSCH
+  ) %>%
+  # Calculate baseline overall toxicity grade BTOXGR
+  derive_var_base(
+    by_vars = vars(STUDYID, USUBJID, PARAMCD, BASETYPE),
+    source_var = ATOXGR,
+    new_var = BTOXGR
   )
 
 ## Calculate R2BASE, R2ANRLO and R2ANRHI ----
@@ -267,11 +273,22 @@ adlb <- adlb %>%
   )
 
 ## SHIFT derivation ----
-adlb <- adlb %>%
+adlb1 <- adlb %>%
+  # derive SHIFT in analysis indicator from baseline
   derive_var_shift(
     new_var = SHIFT1,
     from_var = BNRIND,
     to_var = ANRIND
+  ) %>%
+  # derive SHIFT in overall grade from baseline
+  restrict_derivation(
+    derivation = derive_var_shift,
+    args = params(
+      new_var = SHIFT2,
+      from_var = BTOXGR,
+      to_var =ATOXGR
+    ),
+    filter = !is.na(ATOXDSCL) | !is.na(ATOXDSCH)
   )
 
 ## Flag variables (ANL01FL, LVOTFL) ----
