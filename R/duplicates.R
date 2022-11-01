@@ -33,6 +33,20 @@
 #'
 #' get_duplicates_dataset()
 get_duplicates_dataset <- function() {
+
+  #Get history and search if signal_duplicate_records was last command
+  if(interactive()){
+    savehistory(file = "./temphistory.Rhistory")
+    temphistory = readLines("./temphistory.Rhistory")
+    unlink("./temphistory.Rhistory")
+
+    last_get_call = max(grep("get_duplicates_dataset()", temphistory))
+    prior_to_get_call = temphistory[last_get_call - 1]
+
+    if(!(grepl("signal_duplicate_records", prior_to_get_call))){
+      stop("Prior command was not signal_duplicate_records(), please run before using get_duplicate_records() commmand.")
+    }
+  }
   .datasets$duplicates
 }
 
@@ -117,6 +131,9 @@ signal_duplicate_records <- function(dataset,
     )
     full_msg <- paste0(msg, "\nRun `get_duplicates_dataset()` to access the duplicate records")
     cnd_funs[[cnd_type]](full_msg)
+  }
+  if (nrow(duplicate_records) == 0){
+    .datasets$duplicates <- NULL
   }
 }
 
