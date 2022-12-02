@@ -31,6 +31,43 @@
 #'
 #' get_duplicates_dataset()
 get_duplicates_dataset <- function() {
+  # If using an IDE, search if error message was prompted
+  if(interactive()){
+
+    # Grab RHistory of user's current session
+    savehistory(file = "./temphistory.Rhistory")
+    temphistory = readLines("./temphistory.Rhistory")
+
+    # Try and filter down the rhistory to most recent commands
+    # Ideally get the prior command, but tricky so use prior assignment operator as proxy
+    last_assignment_command = max(grep("<-", temphistory))
+    last_get_call = max(grep("get_duplicates_dataset()", temphistory))
+
+    # Write these snippets of code into a temporary R script
+    temptext = file("./temphistory.R")
+    writeLines(temphistory[last_assignment_command:(last_get_call - 1)], temptext)
+    close(temptext)
+
+    # Create a temporary message and error log
+    file_path = "./templog.txt"
+    file_con = file(file_path, open = "a")
+    sink(file_con, type = "message")
+    try(source("./temphistory.R"))
+    sink(type = "message")
+    close(file_con)
+
+    error_log = readLines("./templog.txt")
+
+    # Delete all these temporary files
+    unlink("./temphistory.Rhistory")
+    unlink("./temphistory.R")
+    unlink("./templog.txt")
+
+    # Search log for whether or not our warning message was inside
+    if(!any(str_detect(error_log, "Run \\`get_duplicates_dataset\\(\\)\\` to access the duplicate records"))){
+      message("Duplicate records may not be up to date, run `get_duplicates_dataset()` only after the prompt: \n   Run `get_duplicates_dataset()` to access the duplicate records.")
+    }
+  }
   admiral_environment$duplicates
 }
 
@@ -116,6 +153,9 @@ signal_duplicate_records <- function(dataset,
     full_msg <- paste0(msg, "\nRun `get_duplicates_dataset()` to access the duplicate records")
     cnd_funs[[cnd_type]](full_msg)
   }
+  # if (nrow(duplicate_records) == 0 ){
+  #   admiral_environment$dduplicates <- NULL
+  # }
 }
 
 print.duplicates <- function(x, ...) {
