@@ -95,7 +95,7 @@ argument and \code{mode} argument) is flagged in the output dataset.
 }
 \examples{
 library(tibble)
-library(dplyr, warn.conflict = FALSE)
+library(dplyr, warn.conflicts = FALSE)
 
 # Flag all AEs after the first COVID AE
 adae <- tribble(
@@ -179,6 +179,7 @@ General Derivation Functions for all ADaMs that returns variable appended to dat
 \code{\link{derive_var_merged_cat}()},
 \code{\link{derive_var_merged_character}()},
 \code{\link{derive_var_merged_exist_flag}()},
+\code{\link{derive_var_merged_summary}()},
 \code{\link{derive_var_obs_number}()},
 \code{\link{derive_var_worst_flag}()},
 \code{\link{derive_vars_joined}()},

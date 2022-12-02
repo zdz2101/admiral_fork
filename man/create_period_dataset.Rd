@@ -4,7 +4,11 @@
 \alias{create_period_dataset}
 \title{Create a Reference Dataset for Subperiods, Periods, or Phases}
 \usage{
-create_period_dataset(dataset, new_vars, subject_keys = vars(STUDYID, USUBJID))
+create_period_dataset(
+  dataset,
+  new_vars,
+  subject_keys = get_admiral_option("subject_keys")
+)
 }
 \arguments{
 \item{dataset}{ADSL dataset
@@ -58,7 +62,7 @@ side).
 }
 \examples{
 library(tibble)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
 
 # Create reference dataset for periods

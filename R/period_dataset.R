@@ -58,7 +58,7 @@
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
 #'
 #' # Create reference dataset for periods
@@ -116,7 +116,7 @@
 #' )
 create_period_dataset <- function(dataset,
                                   new_vars,
-                                  subject_keys = vars(STUDYID, USUBJID)) {
+                                  subject_keys = get_admiral_option("subject_keys")) {
   assert_vars(new_vars, expect_names = TRUE)
   assert_vars(subject_keys)
   assert_data_frame(dataset, required_vars = subject_keys)
@@ -286,7 +286,7 @@ create_period_dataset <- function(dataset,
 #'
 #' @examples
 #' library(tibble)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' library(lubridate)
 #'
 #' adsl <- tibble(STUDYID = "xyz", USUBJID = c("1", "2"))
@@ -357,7 +357,7 @@ create_period_dataset <- function(dataset,
 derive_vars_period <- function(dataset,
                                dataset_ref,
                                new_vars,
-                               subject_keys = vars(STUDYID, USUBJID)) {
+                               subject_keys = get_admiral_option("subject_keys")) {
   assert_vars(new_vars, expect_names = TRUE)
   assert_vars(subject_keys)
   assert_data_frame(dataset, required_vars = subject_keys)

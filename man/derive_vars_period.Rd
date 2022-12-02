@@ -8,7 +8,7 @@ derive_vars_period(
   dataset,
   dataset_ref,
   new_vars,
-  subject_keys = vars(STUDYID, USUBJID)
+  subject_keys = get_admiral_option("subject_keys")
 )
 }
 \arguments{
@@ -64,7 +64,7 @@ of \code{new_vars}.
 }
 \examples{
 library(tibble)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(lubridate)
 
 adsl <- tibble(STUDYID = "xyz", USUBJID = c("1", "2"))
