@@ -302,12 +302,16 @@ impute_dtc_dtm <- function(dtc,
   }
 
   # Handle min_dates and max_dates argument ----
-  restrict_imputed_dtc_dtm(
+  imputed_dtc <- restrict_imputed_dtc_dtm(
     dtc,
     imputed_dtc = imputed_dtc,
     min_dates = min_dates,
     max_dates = max_dates
   )
+  if(highest_imputation == "Y" & is.null(min_dates) & is.null(max_dates)){
+    imputed_dtc <- if_else(stringr::str_starts(imputed_dtc, "(0000|9999)"), "FIX ME", imputed_dtc)
+  }
+  return(imputed_dtc)
 }
 
 #' Create a `dtm_level` object
@@ -544,6 +548,9 @@ restrict_imputed_dtc_dtm <- function(dtc,
         missing = imputed_dtc
       )
     }
+    imputed_dtc <- if_else(stringr::str_starts(imputed_dtc, "(0000|9999)"),
+                           pmax(imputed_dtc, strftime(min_date, format = "%Y-%m-%dT%H:%M:%S", tz = "UTC")),
+                           imputed_dtc)
   }
   if (!is.null(max_dates)) {
     # for each maximum date within the range ensure that the imputed date is not
@@ -562,6 +569,7 @@ restrict_imputed_dtc_dtm <- function(dtc,
         missing = imputed_dtc
       )
     }
+    imputed_dtc <- if_else(stringr::str_starts(imputed_dtc, "(0000|9999)"), NA_character_, imputed_dtc)
   }
   imputed_dtc
 }
