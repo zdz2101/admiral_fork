@@ -186,7 +186,7 @@ derive_param_exist_flag <- function(dataset = NULL,
   assert_character_scalar(true_value)
   assert_character_scalar(false_value)
   assert_character_scalar(missing_value)
-  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
+  filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
   assert_function(aval_fun)
   assert_vars(subject_keys)
   assert_data_frame(

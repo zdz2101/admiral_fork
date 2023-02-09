@@ -156,7 +156,7 @@ derive_summary_records <- function(dataset,
                                    set_values_to = NULL) {
   assert_vars(by_vars)
   analysis_var <- assert_symbol(enexpr(analysis_var))
-  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
   assert_s3_class(summary_fun, "function")
   assert_data_frame(
     dataset,

@@ -89,7 +89,7 @@ derive_var_last_dose_grp <- function(dataset,
                                      right = TRUE,
                                      dose_var = EXDOSE,
                                      traceability_vars = NULL) {
-  filter_ex <- assert_filter_cond(enexpr(filter_ex), optional = TRUE)
+  filter_ex <- assert_filter_cond(enquo(filter_ex), optional = TRUE)
   by_vars <- assert_vars(by_vars)
   dose_date <- assert_symbol(enexpr(dose_date))
   analysis_date <- assert_symbol(enexpr(analysis_date))

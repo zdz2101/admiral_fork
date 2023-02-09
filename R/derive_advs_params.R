@@ -116,7 +116,7 @@ derive_param_map <- function(dataset,
   assert_character_scalar(diabp_code)
   assert_character_scalar(hr_code, optional = TRUE)
   get_unit_expr <- assert_expr(enexpr(get_unit_expr))
-  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
 
   assert_unit(dataset, sysbp_code, required_unit = "mmHg", get_unit_expr = !!get_unit_expr)
   assert_unit(dataset, diabp_code, required_unit = "mmHg", get_unit_expr = !!get_unit_expr)
@@ -325,7 +325,7 @@ derive_param_bsa <- function(dataset,
   assert_character_scalar(height_code)
   assert_character_scalar(weight_code)
   get_unit_expr <- assert_expr(enexpr(get_unit_expr))
-  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
 
   assert_unit(
     dataset,
@@ -542,7 +542,7 @@ derive_param_bmi <- function(dataset,
   assert_character_scalar(weight_code)
   assert_character_scalar(height_code)
   get_unit_expr <- assert_expr(enexpr(get_unit_expr))
-  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
 
   assert_unit(
     dataset,

@@ -85,7 +85,7 @@ derive_vars_transposed <- function(dataset,
                                    filter = NULL) {
   key_var <- assert_symbol(enexpr(key_var))
   value_var <- assert_symbol(enexpr(value_var))
-  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
   assert_vars(by_vars)
   assert_data_frame(dataset, required_vars = replace_values_by_names(by_vars))
   assert_data_frame(dataset_merge, required_vars = expr_c(by_vars, key_var, value_var))

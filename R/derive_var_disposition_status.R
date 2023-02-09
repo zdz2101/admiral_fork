@@ -168,7 +168,7 @@ derive_var_disposition_status <- function(dataset,
                                           subject_keys = get_admiral_option("subject_keys")) {
   new_var <- assert_symbol(enexpr(new_var))
   status_var <- assert_symbol(enexpr(status_var))
-  filter_ds <- assert_filter_cond(enexpr(filter_ds))
+  filter_ds <- assert_filter_cond(enquo(filter_ds))
   assert_s3_class(format_new_var, "function")
   assert_data_frame(dataset)
   assert_data_frame(dataset_ds, expr_c(status_var))

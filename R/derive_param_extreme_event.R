@@ -102,7 +102,7 @@ derive_param_first_event <- function(dataset,
     details = "Please use `derive_param_extreme_event()` instead with the `order` argument instead of the `date_var` argument"
   )
 
-  filter_source <- enexpr(filter_source)
+  filter_source <- enquo(filter_source)
   date_var <- enexpr(date_var)
   tmp_var <- get_new_tmp_var(dataset = dataset)
   tmp_var <- enexpr(tmp_var)
@@ -316,7 +316,7 @@ derive_param_extreme_event <- function(dataset = NULL,
                                        set_values_to,
                                        check_type = "warning") {
   # Check input parameters
-  filter_source <- assert_filter_cond(enexpr(filter_source))
+  filter_source <- assert_filter_cond(enquo(filter_source))
   assert_vars(subject_keys)
   assert_vars(order, optional = TRUE)
   assert_data_frame(dataset_source,

@@ -278,8 +278,8 @@ derive_vars_joined <- function(dataset,
     dataset_add,
     required_vars = expr_c(by_vars, join_vars, extract_vars(order), new_vars)
   )
-  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
-  filter_join <- assert_filter_cond(enexpr(filter_join), optional = TRUE)
+  filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
+  filter_join <- assert_filter_cond(enquo(filter_join), optional = TRUE)
 
   if (is.null(new_vars)) {
     new_vars <- chr2vars(colnames(dataset_add))

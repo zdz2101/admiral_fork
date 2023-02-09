@@ -188,7 +188,7 @@ derive_vars_disposition_reason <- function(dataset,
   new_var_spe <- assert_symbol(enexpr(new_var_spe), optional = T)
   reason_var_spe <- assert_symbol(enexpr(reason_var_spe), optional = T)
   assert_s3_class(format_new_vars, "function")
-  filter_ds <- assert_filter_cond(enexpr(filter_ds))
+  filter_ds <- assert_filter_cond(enquo(filter_ds))
   assert_vars(subject_keys)
   assert_data_frame(dataset, required_vars = subject_keys)
   assert_data_frame(

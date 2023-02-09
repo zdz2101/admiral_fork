@@ -159,7 +159,7 @@ derive_param_computed <- function(dataset,
   assert_vars(by_vars)
   assert_vars(constant_by_vars, optional = TRUE)
   assert_data_frame(dataset, required_vars = exprs(!!!by_vars, PARAMCD, AVAL))
-  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
   params_available <- unique(dataset$PARAMCD)
   assert_character_vector(parameters, values = params_available)
   assert_character_vector(constant_parameters, values = params_available, optional = TRUE)
@@ -280,7 +280,7 @@ derive_derived_param <- function(dataset,
     parameters = parameters,
     analysis_value = !!enexpr(analysis_value),
     set_values_to = set_values_to,
-    filter = !!enexpr(filter),
+    filter = !!enquo(filter),
     constant_by_vars = constant_by_vars,
     constant_parameters = constant_parameters
   )

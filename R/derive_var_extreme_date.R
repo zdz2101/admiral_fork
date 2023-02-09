@@ -536,7 +536,7 @@ date_source <- function(dataset_name,
   }
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
-    filter = assert_filter_cond(enexpr(filter), optional = TRUE),
+    filter = assert_filter_cond(enquo(filter), optional = TRUE),
     date = assert_symbol(enexpr(date)),
     traceability_vars = assert_varval_list(traceability_vars, optional = TRUE)
   )

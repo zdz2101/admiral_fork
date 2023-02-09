@@ -233,7 +233,7 @@ derive_vars_merged <- function(dataset,
                                match_flag = NULL,
                                check_type = "warning",
                                duplicate_msg = NULL) {
-  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
+  filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
   assert_vars(by_vars)
   assert_order_vars(order, optional = TRUE)
   assert_vars(new_vars, optional = TRUE)
@@ -374,7 +374,7 @@ derive_vars_merged_dt <- function(dataset,
                                   duplicate_msg = NULL) {
   assert_vars(by_vars)
   dtc <- assert_symbol(enexpr(dtc))
-  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
+  filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
   assert_data_frame(dataset_add, required_vars = expr_c(by_vars, dtc))
 
   deprecate_warn(
@@ -489,7 +489,7 @@ derive_vars_merged_dtm <- function(dataset,
                                    duplicate_msg = NULL) {
   dtc <- assert_symbol(enexpr(dtc))
 
-  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
+  filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
   assert_data_frame(dataset_add, required_vars = expr_c(by_vars, dtc))
 
   deprecate_warn(
@@ -642,7 +642,7 @@ derive_var_merged_cat <- function(dataset,
                                   missing_value = NA_character_) {
   new_var <- assert_symbol(enexpr(new_var))
   source_var <- assert_symbol(enexpr(source_var))
-  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
+  filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
   assert_data_frame(dataset_add, required_vars = expr_c(by_vars, source_var))
 
   add_data <- filter_if(dataset_add, filter_add) %>%
@@ -777,7 +777,7 @@ derive_var_merged_exist_flag <- function(dataset,
   new_var <- assert_symbol(enexpr(new_var))
   condition <- assert_filter_cond(enexpr(condition))
   filter_add <-
-    assert_filter_cond(enexpr(filter_add), optional = TRUE)
+    assert_filter_cond(enquo(filter_add), optional = TRUE)
 
   add_data <- filter_if(dataset_add, filter_add) %>%
     mutate(!!new_var := if_else(!!condition, 1, 0, 0))
@@ -889,7 +889,7 @@ derive_var_merged_character <- function(dataset,
       case_sensitive = FALSE,
       optional = TRUE
     )
-  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
+  filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
   assert_data_frame(dataset_add, required_vars = expr_c(by_vars, source_var))
   assert_character_scalar(missing_value)
 
@@ -984,7 +984,7 @@ derive_vars_merged_lookup <- function(dataset,
                                       duplicate_msg = NULL,
                                       print_not_mapped = TRUE) {
   assert_logical_scalar(print_not_mapped)
-  filter_add <- assert_filter_cond(enexpr(filter_add), optional = TRUE)
+  filter_add <- assert_filter_cond(enquo(filter_add), optional = TRUE)
 
   res <- derive_vars_merged(
     dataset,
@@ -1181,7 +1181,7 @@ derive_var_merged_summary <- function(dataset,
   new_var <- assert_symbol(enexpr(new_var))
   analysis_var <- assert_symbol(enexpr(analysis_var))
   filter_add <-
-    assert_filter_cond(enexpr(filter_add), optional = TRUE)
+    assert_filter_cond(enquo(filter_add), optional = TRUE)
   assert_s3_class(summary_fun, "function")
   assert_data_frame(
     dataset,

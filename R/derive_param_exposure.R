@@ -151,7 +151,7 @@ derive_param_exposure <- function(dataset,
   assert_data_frame(dataset,
     required_vars = expr_c(by_vars, analysis_var, exprs(PARAMCD), dates)
   )
-  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
   assert_varval_list(set_values_to, required_elements = "PARAMCD")
   assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   assert_character_scalar(input_code)

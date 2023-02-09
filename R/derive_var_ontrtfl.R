@@ -201,7 +201,7 @@ derive_var_ontrtfl <- function(dataset,
 
   ref_end_window <- assert_integer_scalar(ref_end_window, "non-negative")
   assert_logical_scalar(ignore_time_for_ref_end_date)
-  filter_pre_timepoint <- assert_filter_cond(enexpr(filter_pre_timepoint), optional = TRUE)
+  filter_pre_timepoint <- assert_filter_cond(enquo(filter_pre_timepoint), optional = TRUE)
   assert_character_scalar(span_period, values = c("Y", "y"), optional = TRUE)
 
   dataset <- mutate(

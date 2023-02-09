@@ -130,7 +130,7 @@ derive_param_qtc <- function(dataset,
   assert_character_scalar(qt_code)
   assert_character_scalar(rr_code)
   get_unit_expr <- assert_expr(enexpr(get_unit_expr))
-  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
 
   assert_unit(
     dataset,
@@ -318,7 +318,7 @@ derive_param_rr <- function(dataset,
   assert_param_does_not_exist(dataset, set_values_to$PARAMCD)
   assert_character_scalar(hr_code)
   get_unit_expr <- assert_expr(enexpr(get_unit_expr))
-  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
 
   assert_unit(
     dataset,

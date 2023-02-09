@@ -229,7 +229,7 @@ derive_param_framingham <- function(dataset,
   assert_character_scalar(sysbp_code)
   assert_character_scalar(chol_code)
   assert_character_scalar(cholhdl_code)
-  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
 
   get_unit_expr <- assert_expr(enexpr(get_unit_expr))
   assert_unit(

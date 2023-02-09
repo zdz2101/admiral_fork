@@ -84,7 +84,7 @@ derive_var_base <- function(dataset,
   by_vars <- assert_vars(by_vars)
   source_var <- assert_symbol(enexpr(source_var))
   new_var <- assert_symbol(enexpr(new_var))
-  filter <- assert_filter_cond(enexpr(filter))
+  filter <- assert_filter_cond(enquo(filter))
   assert_data_frame(
     dataset,
     required_vars = expr_c(by_vars, source_var)

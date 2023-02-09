@@ -299,7 +299,7 @@ filter_confirmation <- function(dataset,
     )
   first_cond <- assert_filter_cond(enexpr(first_cond), optional = TRUE)
   assert_order_vars(order)
-  filter <- assert_filter_cond(enexpr(filter))
+  filter <- assert_filter_cond(enquo(filter))
   check_type <-
     assert_character_scalar(
       check_type,

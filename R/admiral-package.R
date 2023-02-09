@@ -7,7 +7,7 @@
 #'   n_distinct union distinct summarise coalesce bind_cols na_if tibble
 #' @importFrom magrittr %>%
 #' @importFrom rlang := abort arg_match as_function as_label as_name as_string
-#'   call2 caller_env call_name current_env .data enexpr eval_bare eval_tidy
+#'   call2 caller_env call_name current_env .data enexpr enquo eval_bare eval_tidy
 #'   expr expr_interp expr_label exprs f_lhs f_rhs inform is_expression
 #'   is_missing new_formula parse_expr parse_exprs set_names sym syms type_of
 #'   warn

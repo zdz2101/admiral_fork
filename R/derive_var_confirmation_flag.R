@@ -316,7 +316,7 @@ derive_var_confirmation_flag <- function(dataset,
                                          check_type = "warning") {
   new_var <- assert_symbol(enexpr(new_var))
   first_cond <- assert_filter_cond(enexpr(first_cond), optional = TRUE)
-  filter <- assert_filter_cond(enexpr(filter))
+  filter <- assert_filter_cond(enquo(filter))
   assert_data_frame(dataset)
 
   tmp_obs_nr <- get_new_tmp_var(dataset, prefix = "tmp_obs_nr_")

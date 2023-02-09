@@ -806,7 +806,7 @@ tte_source <- function(dataset_name,
                        set_values_to = NULL) {
   out <- list(
     dataset_name = assert_character_scalar(dataset_name),
-    filter = assert_filter_cond(enexpr(filter), optional = TRUE),
+    filter = assert_filter_cond(enquo(filter), optional = TRUE),
     date = assert_symbol(enexpr(date)),
     censor = assert_integer_scalar(censor),
     set_values_to = assert_varval_list(
@@ -855,7 +855,7 @@ event_source <- function(dataset_name,
                          set_values_to = NULL) {
   out <- tte_source(
     dataset_name = assert_character_scalar(dataset_name),
-    filter = !!enexpr(filter),
+    filter = !!enquo(filter),
     date = !!assert_symbol(enexpr(date)),
     censor = 0,
     set_values_to = set_values_to
@@ -901,7 +901,7 @@ censor_source <- function(dataset_name,
                           set_values_to = NULL) {
   out <- tte_source(
     dataset_name = assert_character_scalar(dataset_name),
-    filter = !!enexpr(filter),
+    filter = !!enquo(filter),
     date = !!assert_symbol(enexpr(date)),
     censor = assert_integer_scalar(censor, subset = "positive"),
     set_values_to = set_values_to

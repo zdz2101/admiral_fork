@@ -117,7 +117,7 @@ derive_param_doseint <- function(dataset,
   assert_character_scalar(tpadm_code)
   assert_character_scalar(zero_doses, values = c("Inf", "100"), optional = TRUE)
   assert_vars(by_vars)
-  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
   assert_data_frame(dataset,
     required_vars = exprs(!!!by_vars, PARAMCD, AVAL)
   )

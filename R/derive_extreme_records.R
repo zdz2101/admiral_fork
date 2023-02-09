@@ -119,7 +119,7 @@ derive_extreme_records <- function(dataset,
       values = c("none", "warning", "error"),
       case_sensitive = FALSE
     )
-  filter <- assert_filter_cond(enexpr(filter), optional = TRUE)
+  filter <- assert_filter_cond(enquo(filter), optional = TRUE)
   assert_varval_list(set_values_to)
 
   # Create new observations
