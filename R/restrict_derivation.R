@@ -75,7 +75,7 @@ restrict_derivation <- function(dataset,
   if (!is.null(args)) {
     assert_function_param(deparse(substitute(derivation)), names(args))
   }
-  filter <- assert_filter_cond(enexpr(filter))
+  filter <- assert_filter_cond(enquo(filter))
 
   # Split input dataset
   data_ignore <- dataset %>%
