@@ -1,0 +1,11 @@
+{
+  "name": "R Environment",
+  "image": "rocker/rstudio:4.1.0",
+  "extensions": [
+    "ms-vscode.vscode-r"
+  ],
+  "settings": {
+    "r.bracketedPaste": true
+  },
+  "postCreateCommand": "Rscript -e 'renv::init(); renv::restore()'"
+}
