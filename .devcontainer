@@ -1,6 +1,6 @@
 {
   "name": "R Environment",
-  "image": "rocker/rstudio:4.1.0",
+  "image": "rocker/rstudio:4.1.3",
   "extensions": [
     "ms-vscode.vscode-r"
   ],

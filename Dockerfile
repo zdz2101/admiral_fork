@@ -1,5 +1,5 @@
 # Use an official R runtime as a parent image
-FROM r-base:latest
+FROM rocker/r-ver.4.1.3
 
 # Set the working directory
 WORKDIR /app
