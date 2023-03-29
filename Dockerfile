@@ -13,10 +13,7 @@ RUN apt-get update && \
       git
 
 # Install R packages
-RUN R -e "install.packages(c("admiraldev", "dplyr", "hms",  "lifecycle", "lubridate",
-"magrittr", "purrr", "rlang", "stringr", "tidyr", "tidyselect", "admiral.test", "covr", "devtools",
-"DT", "diffdf", "knitr", "lintr", "methods", "pkgdown", "readxl", "rmarkdown", "roxygen2", "spelling",
-"styler", "testthat", "tibble", "usethis"))"
+RUN R -e "install.packages(c("admiraldev", "dplyr", "hms",  "lifecycle", "lubridate", "magrittr", "purrr", "rlang", "stringr", "tidyr", "tidyselect", "admiral.test", "covr", "devtools", "DT", "diffdf", "knitr", "lintr", "methods", "pkgdown", "readxl", "rmarkdown", "roxygen2", "spelling", "styler", "testthat", "tibble", "usethis"))"
 
 # Copy the project files into the container
 COPY . /app
