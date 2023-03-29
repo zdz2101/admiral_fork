@@ -13,10 +13,14 @@ RUN apt-get update && \
       git
 
 # Install R packages
-RUN R -e "install.packages(c("admiraldev", "dplyr", "hms",  "lifecycle", "lubridate", "magrittr", "purrr", "rlang", "stringr", "tidyr", "tidyselect", "admiral.test", "covr", "devtools", "DT", "diffdf", "knitr", "lintr", "methods", "pkgdown", "readxl", "rmarkdown", "roxygen2", "spelling", "styler", "testthat", "tibble", "usethis"))"
+RUN R -e "install.packages('renv')"
 
 # Copy the project files into the container
 COPY . /app
+
+# Activate the renv environment
+RUN R -e "renv::init()" && \
+    R -e "renv::restore()"
 
 # Set the default command
 CMD ["R"]
