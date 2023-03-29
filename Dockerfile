@@ -7,10 +7,16 @@ WORKDIR /app
 # Install system dependencies
 RUN apt-get update && \
     apt-get install -y \
-      libssl-dev \
-      libxml2-dev \
-      libcurl4-openssl-dev \
-      git
+    libssl-dev \
+    libxml2-dev \
+    libcurl4-openssl-dev \
+    git \
+    r-base \
+    gdebi-core
+
+RUN wget https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2021.09.0%2B351-amd64.deb
+
+RUN sudo gdebi rstudio-server-2021.09.0+351-amd64.deb
 
 # Install R packages
 RUN R -e "install.packages('renv')"
