@@ -39,7 +39,6 @@ vignettes/*.pdf
 .Renviron
 
 # website documents
-/docs/*
 !/docs/pkgdown.yml
 doc
 Meta
