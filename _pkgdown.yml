@@ -8,9 +8,9 @@ search:
   exclude: ['news/index.html']
 repo:
   url:
-    home: https://github.com/pharmaverse/admiral/
-    source: https://github.com/pharmaverse/admiral/blob/main/
-    issue: https://github.com/pharmaverse/admiral/issues/
+    home: https://github.com/zdz2101/admiral_fork/
+    source: https://github.com/zdz2101/admiral_fork/tree/main/
+    issue: https://github.com/zdz2101/admiral_fork/issues/
     user: https://github.com/
 news:
   cran_dates: true
