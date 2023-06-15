@@ -15,14 +15,13 @@ RUN apt-get update && \
     gdebi-core
 
 # Install R packages
-RUN R -e "install.packages('renv')"
+RUN R -e "install.packages('devtools', 'pkgdown')"
 
 # Copy the project files into the container
 COPY . /app
 
-# Activate the renv environment
-RUN R -e "renv::init()" && \
-    R -e "renv::restore()"
+RUN R -e "devtools::build()" && \
+    R -e "pkgdown::build_site()"
 
 # Set the default command
 CMD ["R"]

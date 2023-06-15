@@ -7,5 +7,5 @@
   "settings": {
     "r.bracketedPaste": true
   },
-  "postCreateCommand": "Rscript -e 'renv::init(); renv::restore()'"
+  "postCreateCommand": "Rscript -e 'devtools::build(); pkgdown::build_site()'"
 }
